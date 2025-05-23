@@ -3,5 +3,5 @@ uvicorn[standard]
 transformers
 torch
 deep-translator
-huggingface-hub
+huggingface_hub[hf_xet]
 tokenizers

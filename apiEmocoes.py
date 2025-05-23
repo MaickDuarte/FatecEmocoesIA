@@ -5,16 +5,20 @@ from transformers import pipeline
 from collections import defaultdict
 from deep_translator import GoogleTranslator
 
-# Traduz texto PT->EN
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+classifier = pipeline("text-classification", model="j-hartmann/emotion-english-distilroberta-base", top_k=None)
+
 def traduzir_texto(texto):
     return GoogleTranslator(source='pt', target='en').translate(texto)
-
-# Inicializa o modelo uma vez só
-classifier = pipeline(
-    "text-classification",
-    model="j-hartmann/emotion-english-distilroberta-base",
-    top_k=None
-)
 
 def analisar_emocoes(texto, threshold=2.0):
     resultados = classifier(texto)[0]
@@ -50,30 +54,11 @@ def analisar_emocoes(texto, threshold=2.0):
 
     return porcentagens_normalizadas, emocao_dominante
 
-# FastAPI app
-app = FastAPI()
-
-# CORS - permita seu front-end acessar a API
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # para testar, aceita tudo, depois restringe para seu front
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Modelo para receber JSON
 class TextoInput(BaseModel):
     texto: str
 
 @app.post("/analisar")
 async def analisar_emocoes_endpoint(dados: TextoInput):
-    texto = dados.texto
-    texto_traduzido = traduzir_texto(texto)
+    texto_traduzido = traduzir_texto(dados.texto)
     resultado, dominante = analisar_emocoes(texto_traduzido)
     return {"resultado": resultado, "dominante": dominante}
-
-# Adição para rodar no Render
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("apiEmocoes:app", host="0.0.0.0", port=10000)

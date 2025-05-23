@@ -1,5 +1,6 @@
 fastapi
 uvicorn
 transformers
-deep-translator
 torch
+deep-translator
+pydantic

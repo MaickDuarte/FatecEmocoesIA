@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: api-emocoes
+    runtime: python
+    buildCommand: ""
+    startCommand: python apiEmocoes.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10

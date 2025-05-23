@@ -1,5 +1,3 @@
-# apiEmocoes.py
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -74,3 +72,8 @@ async def analisar_emocoes_endpoint(dados: TextoInput):
     texto_traduzido = traduzir_texto(texto)
     resultado, dominante = analisar_emocoes(texto_traduzido)
     return {"resultado": resultado, "dominante": dominante}
+
+# Adição para rodar no Render
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("apiEmocoes:app", host="0.0.0.0", port=10000)

@@ -1,6 +1,7 @@
 fastapi
-uvicorn
+uvicorn[standard]
 transformers
 torch
 deep-translator
-pydantic
+huggingface-hub
+tokenizers

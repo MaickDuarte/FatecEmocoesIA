@@ -79,7 +79,7 @@
     btn.textContent = 'Analisando...';
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/analisar', {
+      const response = await fetch('https://api-emocoes-service-176553900326.us-central1.run.app/analisar', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ texto })
